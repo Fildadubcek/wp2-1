@@ -1,89 +1,54 @@
+<?php 
+$amount = filter_input(INPUT_POST, 'amount');
+$final = 0 ;
+define('EUR_CZK', 25);
+$sub = filter_input(INPUT_POST, 'odeslat');
+$switch =  filter_input(INPUT_POST, 'switch');
+$curencyfrom;
+$curencyto;
+$text = "Převod je hotov : " ;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-<?php 
-$amount = filter_input (INPUT_POST, 'amount');
-$type = filter_input (INPUT_POST, 'type');
-$finalamount = 0;
+<h1>Směnárna</h1>
+<br>
+<?php
+if (isset($sub)) {
 
-if($type == "EUR-CZK") {
+    switch ($switch) {
+    case 'czk_eur': 
+        $final = $amount / EUR_CZK ;
+        $curencyfrom = " CZK " ;
+        $curencyto = " EUR " ;
+        break;
+    case 'eur_czk': 
+        $final = $amount * EUR_CZK ;
+        $curencyfrom = " EUR " ;
+        $curencyto = " CZK " ;
+        break;
+                    }
 
-$finalamount = $amount * 25;
-}
-elseif($type =="CZK-EUR") {
-
-  $finalamount = $amount /25;
-}
-elseif ($type =="USD-CZK"){
-
-  $finalamount = $amount *22;
-}
-
-
-
-
-
-
-?>
- <form action="" method="post">
-  <label for="castka">Částka</label>
-
-  <input type="number" id="castka" name="castka" min="1" max="500">  
- <br> 
-   <br>
-       <br>
-<label for ="prevod">Z čeho chcete převádět?</label>
-   <br> 
+        $all =$text . $amount . $curencyfrom . " = " . $final . $curencyto ?>
+<?= $all ?>
+<?php
+} else { ?>
+    <form action="index.php" method="post">
+Peníze: <input type="number" name="amount" id="amount"> <br>
      <br>
-<label for="czk-eur">CZK-EUR</label>
+        CZK to EUR: <input type="radio" name="switch" value="czk_eur" id="switch"><br>
+        EUR to CZK: <input type="radio" name="switch" value="eur_czk" id="switch"><br>
+        <br>
+        <input type="submit" value="odeslat" name="odeslat">
+    </form>
+<?php
+} ?>
 
-<input type="radio" id="czk" name="money" value="CZK-EUR">
-    <br>
-
-<label for="eur-czk">EUR-CZK</label>
-
-<input type="radio" id="eur" name="money" value="EUR-CZK">
-  <br>   
-     <br>
-<label for="czk-usd">CZK-USD</label>
-
-<input type="radio" id="usd" name="money" value="CZK-USD">
-    <br>
-<label for="usd-czk">USD-CZK</label>
-
-<input type="radio" id="usd-czk" name="money" value="USD-CZK">
-    <br>
-         <br>
-<label for="eur-usd">EUR-USD</label>
-
-<input type="radio" id="eur-usd" name="money" value="EUR-USD">
-     <br>
-<label for="USD-EUR">USD-EUR</label>
-     
-<input type="radio" id="usd-eur" name="money" value="USD-EUR">
-
-    <br>
-
-<input type="submit" name="Převod" id="Převod" value="Převod">
-
-</form>
-
-
-   
-
-
-          
-
-
-
-
-
-   
 </body>
 </html>
